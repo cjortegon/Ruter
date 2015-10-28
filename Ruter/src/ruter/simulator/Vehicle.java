@@ -197,9 +197,12 @@ public class Vehicle implements MapComponent {
 	 */
 	public void drive(double frameDuration) {
 		try {
-		driver.drive(frameDuration);
-		} catch(NullPointerException e) {
-			throw new RuntimeException(new NotDriverException("This vehicle doesn't have a Driver"));
+			driver.drive(frameDuration);
+		} catch(NullPointerException npe) {
+			if(driver == null)
+				throw new RuntimeException(new NotDriverException("This vehicle doesn't have a Driver"));
+			else
+				throw npe;
 		}
 		roll(frameDuration);
 	}
