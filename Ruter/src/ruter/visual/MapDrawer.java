@@ -8,8 +8,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
+import ruter.exceptions.MapException;
 import ruter.map.Map;
-import ruter.map.MapException;
 import ruter.map.PathSection;
 
 /**

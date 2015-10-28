@@ -7,6 +7,7 @@ package ruter.simulator;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import ruter.exceptions.NotDriverException;
 import ruter.map.Geometry;
 import ruter.map.Map;
 import ruter.map.MapComponent;
@@ -192,9 +193,14 @@ public class Vehicle implements MapComponent {
 	 * A driver must be assigned to determine the vehicle's behavior.
 	 * @param frameDuration duration of the frame to determine the next position.
 	 * This is because simulation speed can be modified on the way.
+	 * @throws NotDriverException 
 	 */
 	public void drive(double frameDuration) {
+		try {
 		driver.drive(frameDuration);
+		} catch(NullPointerException e) {
+			throw new RuntimeException(new NotDriverException("This vehicle doesn't have a Driver"));
+		}
 		roll(frameDuration);
 	}
 

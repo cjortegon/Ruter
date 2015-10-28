@@ -6,6 +6,8 @@ package ruter.map;
 
 import java.util.ArrayList;
 
+import ruter.exceptions.MapException;
+
 /**
  * Streets are made of many PathSection connected, the first node (PathSection) has previous in null and in the last the next is pointing to null.
  * The objects of this class must be created by a map instance.
