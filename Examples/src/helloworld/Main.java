@@ -1,27 +1,32 @@
 package helloworld;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.ScrollPane;
 import java.awt.Toolkit;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import ruter.exceptions.MapException;
 import ruter.map.Map;
-import ruter.map.MapException;
 import ruter.map.PathSection;
 import ruter.simulator.Simulation;
+import ruter.simulator.Vehicle;
 
 public class Main extends JFrame {
 
 	private static final Dimension simulationSize = new Dimension(1000, 1000);
 	private static final Dimension windowSize = new Dimension(900, 600);
 	private static final long FRAME_TIME = Simulation.ACCURACY_HIGH;
+	private static final int NUMBER_OF_VEHICLES = 10;
 
 	private Map map;
 	private Simulation simulation;
 	private PathSection firstSection;
+	private JPanel panelToDraw;
 
 	public static void main(String[] args) {
 		new Main();
@@ -30,6 +35,7 @@ public class Main extends JFrame {
 	public Main() {
 
 		initWindow();
+		initSimulation();
 
 	}
 
@@ -40,7 +46,7 @@ public class Main extends JFrame {
 		ScrollPane scroll = new ScrollPane();
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		scroll.setPreferredSize(new Dimension((int) (screenSize.width * 0.8), (int) (screenSize.height * 0.8)));
-		JPanel panelToDraw = new JPanel() {
+		panelToDraw = new JPanel() {
 			public void paintComponent(Graphics g) {
 				super.paintComponent(g);
 				paintCanvas(g);
@@ -76,12 +82,22 @@ public class Main extends JFrame {
 			map.finishMap();
 		} catch (MapException e) {}
 
-		simulation = new Simulation(this, map, null, simulationSize.width, simulationSize.height, FRAME_TIME);
+		simulation = new Simulation(panelToDraw, map, null, simulationSize.width, simulationSize.height, FRAME_TIME);
+
+		Color colors[] = {Color.blue, Color.cyan, Color.red, Color.black, Color.white, Color.green, Color.yellow, Color.pink};
+		Random random = new Random();
+		for (int i = 0; i < NUMBER_OF_VEHICLES; i++) {
+			Vehicle v = new Vehicle((i % 10)*2.5 + 5, 2.5 * (i/10) + 5, 2, 1, 1.5, 0);
+			v.putDriver(new MyDriver(firstSection));
+			simulation.addVehicle(v, colors[random.nextInt(12345) % colors.length]);
+		}
+
+		simulation.start();
 
 	}
 
 	public void paintCanvas(Graphics g) {
-
+		simulation.repaint(g, 4);
 	}
 
 }
