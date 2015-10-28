@@ -4,8 +4,8 @@ package test.mainclasses;
  * and open the template in the editor.
  */
 
+import ruter.exceptions.MapException;
 import ruter.map.Map;
-import ruter.map.MapException;
 import ruter.map.PathSection;
 import ruter.simulator.Simulation;
 import ruter.simulator.Vehicle;
@@ -18,9 +18,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Random;
 
-import javax.swing.Painter;
-
-import ruter.network.AdhocNetwork;
 import visualkey.KCanvas;
 
 /**
@@ -39,7 +36,6 @@ public class Test extends KCanvas implements KeyListener {
 
 	private Map map;
 	private PathSection firstSection;
-//	private ContinueDriver driver;
 	private Simulation simulation;
 
 	public static void main(String args[]) {
@@ -91,13 +87,11 @@ public class Test extends KCanvas implements KeyListener {
 
 	private void addVehicles() {
 		Color colors[] = {Color.blue, Color.cyan, Color.red, Color.black, Color.white, Color.green, Color.yellow, Color.pink};
-		Random ale = new Random();
+		Random random = new Random();
 		for (int i = 0; i < NUMBER_OF_VEHICLES; i++) {
 			Vehicle v = new Vehicle((i % 10)*2.5 + 5, 2.5 * (i/10) + 5, 2, 1, 1.5, 0);
-//			Vehicle v = new Vehicle(i*2.5, 10 + 5, 2, 1, 1.5, 180);
-//			driver = new ContinueDriver(map, firstSection, FRAME_TIME/1000d, simulation);
 			v.putDriver(new ContinueDriver(map, firstSection, FRAME_TIME/1000d, simulation));
-			simulation.addVehicle(v, colors[ale.nextInt(12345) % colors.length]);
+			simulation.addVehicle(v, colors[random.nextInt(12345) % colors.length]);
 		}
 	}
 
